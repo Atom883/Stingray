@@ -1,16 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Description: >
+  stingray
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+    LoggingConfig:
+      LogFormat: JSON
+
 Resources:
   ExampleFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: rust-cargolambda
     Properties:
-      Handler: bootstrap
-      Runtime: provided.al2
-      MemorySize: 128
-      Timeout: 10
-      Policies:
-        - AWSLambdaBasicExecutionRole
+      PackageType: Image
+      Architectures:
+        - x86_64
       Environment:
         Variables:
           RUST_LOG: info
@@ -21,6 +28,9 @@ Resources:
             Path: /example
             Method: get
             Cors: "'*'"
+    Metadata:
+      DockerContext: ./backend/example
+      Dockerfile: Dockerfile
 Outputs:
   ExampleFunctionArn:
     Description: "Example Lambda Function ARN"
