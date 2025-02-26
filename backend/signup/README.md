@@ -1,6 +1,6 @@
 # Introduction
 
-example is a Rust project that implements an AWS Lambda function in Rust.
+signup is a Rust project that implements an AWS Lambda function in Rust.
 
 ## Prerequisites
 
