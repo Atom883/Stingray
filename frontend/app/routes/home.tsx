@@ -139,7 +139,7 @@ export default function Home() {
           bottom: "10%",
         }}
       >
-        <Link to="/wearing">
+        <Link to="/custom">
           <button
             style={{
               display: "flex",
@@ -165,7 +165,7 @@ export default function Home() {
               alt="wearing"
               style={{ width: "40px", marginRight: "12px" }}
             />
-            栄権
+            影変
           </button>
         </Link>
 
