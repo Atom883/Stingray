@@ -1,4 +1,4 @@
-name: 'publish'
+name: "publish"
 on:
   push:
     branches:
@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/release/stingray.exe
+          asset_path: ./../target/release/stingray.exe
           asset_name: stingray.exe
           asset_content_type: application/octet-stream
 
@@ -60,6 +60,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/release/stingray
+          asset_path: ./../target/release/stingray
           asset_name: ${{ matrix.platform }}-stingray
           asset_content_type: application/octet-stream
