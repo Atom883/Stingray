@@ -7,7 +7,7 @@ export default [
 
     { path: "fishing", file: "routes/fishing.tsx", },
 
-    { path: "wearing", file: "routes/wearing.tsx", },
+    { path: "custom", file: "routes/custom.tsx", },
 
     {path: "signup", file: "routes/signup.tsx", },
 
