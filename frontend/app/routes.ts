@@ -7,6 +7,7 @@ export default [
 
     { path: "fishing", file: "routes/fishing.tsx", },
 
-    { path: "training", file: "routes/training.tsx", },
+    { path: "wearing", file: "routes/wearing.tsx", },
+
 
 ] satisfies RouteConfig;
