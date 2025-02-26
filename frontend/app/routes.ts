@@ -7,6 +7,13 @@ export default [
 
     { path: "fishing", file: "routes/fishing.tsx", },
 
-    { path: "training", file: "routes/training.tsx", },
+    { path: "custom", file: "routes/custom.tsx", },
+
+    {path: "signup", file: "routes/signup.tsx", },
+
+    {path: "login", file: "routes/login.tsx", },
+
+    {path: "logout", file: "routes/logout.tsx", },
+
 
 ] satisfies RouteConfig;
