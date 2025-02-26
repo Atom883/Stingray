@@ -1,0 +1,21 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { version = "*", features = ["ws"] }
+tower-http = { version = "*", features = ["cors", "trace"] }
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+tokio-tungstenite = { version = "*", features = ["native-tls"] }
+anyhow = "*"
+tokio = { version = "*", features = ["macros", "rt-multi-thread", "sync", "fs", "time"] }
+sqlx = { version = "*", features = ["runtime-tokio-native-tls", "sqlite", "migrate"] }
+chrono = "*"
+fxhash = "*"
+uuid = { version = "*", features = ["v4", "fast-rng", "macro-diagnostics"] }
+tracing = "*"
+tracing-subscriber = { version = "*", features = ["json"] }
+bcrypt = "0.17.0"
+futures = "0.3.31"
