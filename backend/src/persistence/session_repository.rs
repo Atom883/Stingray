@@ -19,7 +19,7 @@ impl SessionRepository<SqlxConn> for SqlxSessionRepository {
         sqlx::query(
             r#"
             INSERT INTO sessions (id, user_id, created_at)
-            VALUES ($1, $2)
+            VALUES ($1, $2, $3)
             "#,
         )
         .bind(&session.id)
