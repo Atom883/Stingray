@@ -9,5 +9,11 @@ export default [
 
     { path: "wearing", file: "routes/wearing.tsx", },
 
+    {path: "signup", file: "routes/signup.tsx", },
+
+    {path: "login", file: "routes/login.tsx", },
+
+    {path: "logout", file: "routes/logout.tsx", },
+
 
 ] satisfies RouteConfig;
