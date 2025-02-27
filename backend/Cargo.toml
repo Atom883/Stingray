@@ -18,3 +18,4 @@ uuid = { version = "*", features = ["v4", "fast-rng", "macro-diagnostics"] }
 tracing = "*"
 tracing-subscriber = { version = "*", features = ["json"] }
 bcrypt = "0.17.0"
+futures-util = "0.3.31"
