@@ -1,9 +1,14 @@
 use crate::{
+    StingrayState,
     domain::{
         entities::{Session, User, UserData},
-        repositories::{session_repository::SessionRepository, user_data_repository::UserDataRepository, user_repository::UserRepository},
+        repositories::{
+            session_repository::SessionRepository, user_data_repository::UserDataRepository,
+            user_repository::UserRepository,
+        },
         transaction_manager::TransactionManager,
-    }, response::AppResult, StingrayState
+    },
+    response::AppResult,
 };
 use axum::http::{HeaderMap, HeaderValue, header};
 use axum::{Json, extract::State, response::IntoResponse};
@@ -69,10 +74,7 @@ pub async fn register<
     let userdata = UserData::new(user_id);
 
     let mut headers = HeaderMap::new();
-    headers.insert(
-        header::SET_COOKIE,
-        HeaderValue::from_str(&format!("session_id={session_id}"))?,
-    );
+    headers.insert(header::AUTHORIZATION, HeaderValue::from_str(&session_id)?);
 
     Ok((headers, Json(userdata)))
 }
