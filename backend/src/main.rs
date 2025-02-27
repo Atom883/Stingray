@@ -126,7 +126,7 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .route("/ws", get(ws_handler))
         .nest("/api", api_routes)
-        .layer(from_fn(service))
+        // .layer(from_fn(service))
         .layer(
             CorsLayer::new()
                 .allow_origin(tower_http::cors::Any)
@@ -156,38 +156,38 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn service(
-    ConnectInfo(addr): ConnectInfo<SocketAddr>,
-    headers: HeaderMap,
-    request: Request,
-    next: Next,
-) -> Result<Response, StatusCode> {
-    let path = request.uri().path();
+// async fn service(
+//     ConnectInfo(addr): ConnectInfo<SocketAddr>,
+//     headers: HeaderMap,
+//     request: Request,
+//     next: Next,
+// ) -> Result<Response, StatusCode> {
+//     let path = request.uri().path();
 
-    if let Some(response) = static_file_service(path) {
-        return Ok(response);
-    }
+//     if let Some(response) = static_file_service(path) {
+//         return Ok(response);
+//     }
 
-    Ok(next.run(request).await)
-}
+//     Ok(next.run(request).await)
+// }
 
-fn static_file_service(path: &str) -> Option<Response> {
-    static ASSETS_DIR: include_dir::Dir =
-        include_dir::include_dir!("$CARGO_MANIFEST_DIR/../frontend/build/client");
+// fn static_file_service(path: &str) -> Option<Response> {
+//     static ASSETS_DIR: include_dir::Dir =
+//         include_dir::include_dir!("$CARGO_MANIFEST_DIR/../frontend/build/client");
 
-    let file_path = if path == "/" {
-        "index.html"
-    } else {
-        &path[1..]
-    };
+//     let file_path = if path == "/" {
+//         "index.html"
+//     } else {
+//         &path[1..]
+//     };
 
-    let file = ASSETS_DIR.get_file(file_path)?;
+//     let file = ASSETS_DIR.get_file(file_path)?;
 
-    let mime = mime_guess::from_path(file.path()).first_or_text_plain();
+//     let mime = mime_guess::from_path(file.path()).first_or_text_plain();
 
-    Response::builder()
-        .header("Content-Type", mime.as_ref())
-        .body(axum::body::Body::from(file.contents().to_vec()))
-        .inspect_err(|e| tracing::error!("{e}"))
-        .ok()
-}
+//     Response::builder()
+//         .header("Content-Type", mime.as_ref())
+//         .body(axum::body::Body::from(file.contents().to_vec()))
+//         .inspect_err(|e| tracing::error!("{e}"))
+//         .ok()
+// }
