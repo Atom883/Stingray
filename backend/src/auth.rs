@@ -14,6 +14,7 @@ pub async fn get_user_id_from_request<
     session_repository: SR,
     headers: HeaderMap,
 ) -> anyhow::Result<String> {
+    tracing::info!("headers: {:?}", headers);
     let session_id = headers
         .get("session_id")
         .and_then(|v| v.to_str().ok())

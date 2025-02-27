@@ -58,7 +58,7 @@ pub async fn login<
         let mut headers = HeaderMap::new();
         headers.insert(
             header::SET_COOKIE,
-            HeaderValue::from_str(&format!("session_id={session_id}; HttpOnly"))?,
+            HeaderValue::from_str(&format!("session_id={session_id}"))?,
         );
 
         Ok(headers)
