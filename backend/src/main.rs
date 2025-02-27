@@ -1,7 +1,10 @@
 use anyhow::Context;
 use axum::{
     Router,
-    http::{Method, header::CONTENT_TYPE},
+    extract::{ConnectInfo, Request},
+    http::{HeaderMap, Method, StatusCode, header::CONTENT_TYPE},
+    middleware::{Next, from_fn},
+    response::Response,
     routing::{get, post},
 };
 use bcrypt::BcryptError;
@@ -123,6 +126,7 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .route("/ws", get(ws_handler))
         .nest("/api", api_routes)
+        .layer(from_fn(service))
         .layer(
             CorsLayer::new()
                 .allow_origin(tower_http::cors::Any)
@@ -150,4 +154,40 @@ async fn main() -> anyhow::Result<()> {
     .await?;
 
     Ok(())
+}
+
+async fn service(
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
+    request: Request,
+    next: Next,
+) -> Result<Response, StatusCode> {
+    let path = request.uri().path();
+
+    if let Some(response) = static_file_service(path) {
+        return Ok(response);
+    }
+
+    Ok(next.run(request).await)
+}
+
+fn static_file_service(path: &str) -> Option<Response> {
+    static ASSETS_DIR: include_dir::Dir =
+        include_dir::include_dir!("$CARGO_MANIFEST_DIR/../frontend/build/client");
+
+    let file_path = if path == "/" {
+        "index.html"
+    } else {
+        &path[1..]
+    };
+
+    let file = ASSETS_DIR.get_file(file_path)?;
+
+    let mime = mime_guess::from_path(file.path()).first_or_text_plain();
+
+    Response::builder()
+        .header("Content-Type", mime.as_ref())
+        .body(axum::body::Body::from(file.contents().to_vec()))
+        .inspect_err(|e| tracing::error!("{e}"))
+        .ok()
 }
