@@ -68,17 +68,7 @@ pub async fn register<
         })
         .await?;
 
-    let userdata = UserData {
-        user_id,
-        a_state: AState {
-            name: "Stingray".to_string(),
-            hp: 100,
-            max_hp: 100,
-            color: Color::Blue,
-            ..Default::default()
-        },
-        feeds: FxHashMap::default(),
-    };
+    let userdata = UserData::new(user_id);
 
     let mut headers = HeaderMap::new();
     headers.insert(

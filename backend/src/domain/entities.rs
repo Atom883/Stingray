@@ -20,19 +20,43 @@ pub struct Session {
 #[derive(Serialize, Deserialize)]
 pub struct UserData {
     pub user_id: String,
-    pub a_state: AState,
-    pub feeds: FxHashMap<Feed, i64>,
+    a_state: AState,
+    feeds: FxHashMap<Feed, i64>,
 }
 
-#[derive(Serialize, Deserialize, Default)]
+impl UserData {
+    pub fn new(user_id: String) -> Self {
+        Self {
+            user_id,
+            a_state: AState::default(),
+            feeds: FxHashMap::default(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct AState {
     pub name: String,
     pub hp: i64,
     pub max_hp: i64,
     pub color: Color,
-    pub font_family: Option<String>,
+    pub font: Option<String>,
     pub is_bold: bool,
     pub is_outlined: bool,
+}
+
+impl Default for AState {
+    fn default() -> Self {
+        Self {
+            name: "Stingray".to_string(),
+            hp: 100,
+            max_hp: 100,
+            color: Color::White,
+            font: None,
+            is_bold: false,
+            is_outlined: false,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Default)]
