@@ -154,10 +154,10 @@ export default function Home() {
               transition: "all 0.3s ease",
             }}
             onMouseOver={(e) => {
-              e.target.style.backgroundColor = "#BDBDBD";
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
             }}
             onMouseOut={(e) => {
-              e.target.style.backgroundColor = "#E0E0E0";
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
             }}
           >
             <img
@@ -169,7 +169,7 @@ export default function Home() {
           </button>
         </Link>
 
-        <Link to="/battle">
+        <Link to="/battle-lobby">
           <button
             style={{
               display: "flex",
@@ -184,10 +184,10 @@ export default function Home() {
               transition: "all 0.3s ease",
             }}
             onMouseOver={(e) => {
-              e.target.style.backgroundColor = "#BDBDBD";
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
             }}
             onMouseOut={(e) => {
-              e.target.style.backgroundColor = "#E0E0E0";
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
             }}
           >
             <img
@@ -214,10 +214,10 @@ export default function Home() {
               transition: "all 0.3s ease",
             }}
             onMouseOver={(e) => {
-              e.target.style.backgroundColor = "#BDBDBD";
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
             }}
             onMouseOut={(e) => {
-              e.target.style.backgroundColor = "#E0E0E0";
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
             }}
           >
             <img
@@ -243,12 +243,12 @@ export default function Home() {
             cursor: "pointer",
             transition: "all 0.3s ease",
           }}
-          onMouseOver={(e) => {
-            e.target.style.backgroundColor = "#BDBDBD";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#E0E0E0";
-          }}
+            onMouseOver={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
+            }}
+            onMouseOut={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
+            }}
         >
           <img
             src="https://icooon-mono.com/i/icon_10071/icon_100711_64.png"

@@ -15,5 +15,7 @@ export default [
 
     {path: "logout", file: "routes/logout.tsx", },
 
+    {path: "battle-lobby", file: "routes/BattleLobby.tsx", },
+
 
 ] satisfies RouteConfig;
