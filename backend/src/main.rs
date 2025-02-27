@@ -113,6 +113,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/register", post(api::register))
         .route("/login", post(api::login))
         .route("/user", get(api::get_user))
+        .route("/add_fish", post(api::add_fish))
+        .route("/eat_fish", post(api::eat_fish))
         .with_state(state.clone());
     let app = Router::new()
         .route("/ws", get(ws_handler))

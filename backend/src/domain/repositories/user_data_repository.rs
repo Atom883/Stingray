@@ -19,7 +19,6 @@ pub trait UserDataRepository<Conn>: Send + Sync + Copy {
     ) -> impl Future<Output = Result<Option<UserData>>> + Send;
     fn update(
         &self,
-        id: &str,
         user_data: UserData,
         ctx: TransactionContext<Conn>,
     ) -> impl Future<Output = Result<()>> + Send;

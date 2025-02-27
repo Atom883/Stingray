@@ -30,10 +30,10 @@ pub async fn get_user<
 ) -> AppResult<impl IntoResponse> {
     let user_id = get_user_id_from_request(txm.clone(), session_repository, headers).await?;
 
-    let user = txm
+    let user_data = txm
         .run(|ctx| user_data_repository.get_by_user_id(&user_id, ctx))
         .await?
         .context("user_data not found")?;
 
-    Ok(Json(user))
+    Ok(Json(user_data))
 }

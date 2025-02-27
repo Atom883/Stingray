@@ -75,7 +75,6 @@ impl UserDataRepository<SqlxConn> for SqlxUserDataRepository {
 
     async fn update(
         &self,
-        id: &str,
         user_data: UserData,
         ctx: TransactionContext<SqlxConn>,
     ) -> anyhow::Result<()> {
@@ -87,7 +86,7 @@ impl UserDataRepository<SqlxConn> for SqlxUserDataRepository {
                 WHERE user_id = $1
                 "#,
         )
-        .bind(id)
+        .bind(&user_data_.user_id)
         .bind(&user_data_.a_state)
         .bind(&user_data_.feeds)
         .execute(get_conn!(ctx))

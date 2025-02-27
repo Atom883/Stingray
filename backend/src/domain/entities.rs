@@ -19,7 +19,7 @@ pub struct Session {
     pub created_at: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct UserData {
     pub user_id: String,
@@ -37,7 +37,7 @@ impl UserData {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AState {
     pub name: String,
@@ -63,7 +63,7 @@ impl Default for AState {
     }
 }
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize, Default, Clone, Copy)]
 pub enum Color {
     Yellow,
     Red,
@@ -74,7 +74,7 @@ pub enum Color {
     White,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Hash, Clone, Copy)]
 pub struct Feed(char);
 impl TryInto<Feed> for char {
     type Error = anyhow::Error;
@@ -84,5 +84,11 @@ impl TryInto<Feed> for char {
             "Not an ASCII alphabetic character"
         );
         Ok(Feed(self.to_ascii_uppercase()))
+    }
+}
+
+impl Feed {
+    pub fn is_a(&self) -> bool {
+        self.0 == 'A'
     }
 }
