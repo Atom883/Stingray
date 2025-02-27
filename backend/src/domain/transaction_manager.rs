@@ -1,7 +1,8 @@
-use futures::future::BoxFuture;
 use sqlx::{Sqlite, SqlitePool, Transaction, pool::PoolConnection};
-use std::sync::Arc;
+use std::{pin::Pin, sync::Arc};
 use tokio::sync::{Mutex, MutexGuard};
+
+type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
 pub trait TransactionManager<Conn>: Send + Sync {
     fn run<'a, R: Send + 'a, F: Future<Output = anyhow::Result<R>> + Send + 'a>(
@@ -14,21 +15,18 @@ pub trait TransactionManager<Conn>: Send + Sync {
     ) -> BoxFuture<'a, anyhow::Result<R>>;
 }
 
-pub struct TransactionContext<Conn> {
-    conn: Arc<Mutex<Conn>>,
-}
+pub struct TransactionContext<Conn>(Arc<Mutex<Conn>>);
+
 impl<Conn> Clone for TransactionContext<Conn> {
     fn clone(&self) -> Self {
-        Self {
-            conn: Arc::clone(&self.conn),
-        }
+        Self(Arc::clone(&self.0))
     }
 }
 
 impl TransactionContext<SqlxConn> {
     /// Don't call this method directly. Use the `get_conn!` or `bind_conn!` macros instead.
     pub async fn conn(&self) -> MutexGuard<'_, SqlxConn> {
-        self.conn.lock().await
+        self.0.lock().await
     }
 }
 
@@ -59,13 +57,11 @@ pub enum SqlxConn {
     Pool(PoolConnection<Sqlite>),
 }
 
-pub struct SqlxTransactionManager {
-    pool: SqlitePool,
-}
+pub struct SqlxTransactionManager(SqlitePool);
 
 impl SqlxTransactionManager {
     pub fn new(pool: SqlitePool) -> Self {
-        Self { pool }
+        Self(pool)
     }
 }
 
@@ -75,10 +71,8 @@ impl TransactionManager<SqlxConn> for SqlxTransactionManager {
         f: impl FnOnce(TransactionContext<SqlxConn>) -> F + Send + 'a,
     ) -> BoxFuture<'a, anyhow::Result<R>> {
         Box::pin(async move {
-            let conn = self.pool.acquire().await?;
-            let tx_ctx = TransactionContext {
-                conn: Arc::new(Mutex::new(SqlxConn::Pool(conn))),
-            };
+            let conn = self.0.acquire().await?;
+            let tx_ctx = TransactionContext(Arc::new(Mutex::new(SqlxConn::Pool(conn))));
             f(tx_ctx).await
         })
     }
@@ -88,20 +82,16 @@ impl TransactionManager<SqlxConn> for SqlxTransactionManager {
         f: impl FnOnce(TransactionContext<SqlxConn>) -> F + Send + 'a,
     ) -> BoxFuture<'a, anyhow::Result<R>> {
         Box::pin(async move {
-            let tx = Arc::new(Mutex::new(SqlxConn::Tx(self.pool.begin().await?)));
-            let result = f(TransactionContext { conn: tx.clone() }).await;
+            let tx = Arc::new(Mutex::new(SqlxConn::Tx(self.0.begin().await?)));
+            let result = f(TransactionContext(tx.clone())).await?;
             // ensure that the arc ref count is 1
             let SqlxConn::Tx(tx) = Arc::try_unwrap(tx).unwrap().into_inner() else {
-                unreachable!(
+                panic!(
                     "The TransactionContext value was incorrectly manipulated in the with_tx closure."
                 );
             };
-            if result.is_ok() {
-                tx.commit().await?;
-            } else {
-                tx.rollback().await?;
-            }
-            result
+            tx.commit().await?;
+            Ok(result)
         })
     }
 }
