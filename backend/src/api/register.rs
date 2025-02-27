@@ -12,12 +12,19 @@ use crate::{
 };
 use axum::http::{HeaderMap, HeaderValue, header};
 use axum::{Json, extract::State, response::IntoResponse};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct RegisterRequest {
     pub id: String,
     pub password: String,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterResponse {
+    pub session_id: String,
+    pub user: UserData,
 }
 
 pub async fn register<
@@ -73,11 +80,10 @@ pub async fn register<
 
     let userdata = UserData::new(user_id);
 
-    let mut headers = HeaderMap::new();
-    headers.insert(
-        header::AUTHORIZATION,
-        HeaderValue::from_str(&format!("Bearer {session_id}"))?,
-    );
-
-    Ok((headers, Json(userdata)))
+    Ok(Json({
+        RegisterResponse {
+            session_id,
+            user: userdata,
+        }
+    }))
 }

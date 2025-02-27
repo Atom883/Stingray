@@ -17,6 +17,13 @@ use axum::{
     http::{HeaderMap, HeaderValue, header},
     response::IntoResponse,
 };
+use serde::Serialize;
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LoginResponse {
+    pub session_id: String,
+}
 
 pub async fn login<
     Conn: Send,
@@ -55,13 +62,7 @@ pub async fn login<
         })
         .await?;
 
-        let mut headers = HeaderMap::new();
-        headers.insert(
-            header::AUTHORIZATION,
-            HeaderValue::from_str(&format!("Bearer {session_id}"))?,
-        );
-
-        Ok(headers)
+        Ok(Json(LoginResponse { session_id }))
     } else {
         Err(anyhow::anyhow!("password is incorrect").into())
     }
