@@ -42,10 +42,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <div>
-
-		<Outlet />
-		</div>;
+	return (
+		<div>
+			<Outlet />
+		</div>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
