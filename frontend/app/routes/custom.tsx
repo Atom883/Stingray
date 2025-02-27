@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useAtom } from 'jotai';
+import { userDataAtom } from '../jotai/atoms';
 
 export default function Custom() {
 	// ▼ State
@@ -8,6 +10,8 @@ export default function Custom() {
 	const [isBold, setIsBold] = useState(false);
 	const [isOutlined, setIsOutlined] = useState(false);
 	const [fontFamily, setFontFamily] = useState("Arial, sans-serif");
+	const [userData, setUserData] = useAtom(userDataAtom);
+	
 
 	// ▼ フォント候補
 	const fontList = [
@@ -49,8 +53,8 @@ export default function Custom() {
 			});
 	
 			if (response.ok) {
-				const data = await response.json();
-				Cookies.set("sessionId", data.sessionId);
+				const responseData = await response.json();
+				setUserData(responseData);
 				alert("カスタム成功");
 			} else {
 				alert("カスタム失敗");
@@ -65,14 +69,11 @@ export default function Custom() {
 	// ▼ "A" に適用する最終スタイル
 	const aStyle = {
 		fontSize: "500px",
-		color: fontColor,
-		fontWeight: isBold ? "bold" : "normal",
-		textShadow: isOutlined
-			? `-1px 0px 2px #000, 0px 1px 2px #000,
-         1px 0px 2px #000, 0px -1px 2px #000`
-			: "2px 2px 6px rgba(0, 0, 0, 0.5)",
+		color: userData.aState.color,
+		fontWeight: userData.aState.isBold ? "bold" : "normal", // isBoldを反映
+        fontFamily: userData.aState.font || "inherit", // fontが設定されていれば適用
+		textShadow: userData.aState.isOutlined ? "4px 4px 8px rgba(0, 0, 0, 0.7)" : "none", // 文字に影を追加
 		transition: "all 0.3s ease",
-		fontFamily: fontFamily,
 	};
 
 	useEffect(() => {
@@ -213,7 +214,7 @@ export default function Custom() {
 					right: "20px",
 				}}
 			>
-				<Link to="/">
+
 					{/* ▼ Saveボタン */}
                     <button
                         onClick={handleCustom}
@@ -230,7 +231,26 @@ export default function Custom() {
                     >
                         Save
                     </button>
-				</Link>
+
+					{/* ▼ ホームに戻るボタン（リンク） */}
+					<Link
+						to="/"
+						style={{
+						marginLeft: "16px",       // Saveボタンとの間隔
+						padding: "10px 20px",
+						fontSize: "1.2rem",
+						borderRadius: "8px",
+						border: "none",
+						backgroundColor: "#007bff",
+						color: "#fff",
+						textDecoration: "none",  // リンクの下線を消す
+						boxShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+						cursor: "pointer",
+						}}
+					>
+						Home
+					</Link>
+				
 			</div>
 		</div>
 	);
