@@ -7,6 +7,7 @@ const Signup: React.FC = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+
     const handleSignup = async () => {
         try {
             const response = await fetch('http://localhost:3000/api/register', {
