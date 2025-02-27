@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Custom() {
 	// ▼ State
@@ -31,6 +32,35 @@ export default function Custom() {
 		{ label: "Gray", value: "#808080" },
 		{ label: "White", value: "#FFFFFF" },
 	];
+
+	const handleCustom = async () => {
+		try {
+			const response = await fetch("/api/custom", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					fontColor: fontColor,  // フォントカラー
+					isBold: isBold,        // 太字設定 (true/false)
+					isOutlined: isOutlined,// アウトライン設定 (true/false)
+					font: fontFamily       // フォントスタイル
+				}),
+			});
+	
+			if (response.ok) {
+				const data = await response.json();
+				Cookies.set("sessionId", data.sessionId);
+				alert("カスタム成功");
+			} else {
+				alert("カスタム失敗");
+			}
+		} catch (error) {
+			console.error("エラー:", error);
+			alert("エラーが発生しました");
+		}
+	};
+	
 
 	// ▼ "A" に適用する最終スタイル
 	const aStyle = {
@@ -184,20 +214,22 @@ export default function Custom() {
 				}}
 			>
 				<Link to="/">
-					<button
-						style={{
-							padding: "10px 20px",
-							fontSize: "1rem",
-							borderRadius: "8px",
-							border: "none",
-							backgroundColor: "#F08030",
-							color: "#fff",
-							cursor: "pointer",
-							boxShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-						}}
-					>
-						Home
-					</button>
+					{/* ▼ Saveボタン */}
+                    <button
+                        onClick={handleCustom}
+                        style={{
+                            padding: "10px 20px",
+                            fontSize: "1.2rem",
+                            borderRadius: "8px",
+                            border: "none",
+                            backgroundColor: "#28a745",
+                            color: "#fff",
+                            cursor: "pointer",
+                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+                        }}
+                    >
+                        Save
+                    </button>
 				</Link>
 			</div>
 		</div>

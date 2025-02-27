@@ -8,7 +8,7 @@ const Login: React.FC = () => {
 
 	const handleLogin = async () => {
 		try {
-			const response = await fetch("/api/login", {
+			const response = await fetch("http://localhost:3000/api/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -17,8 +17,6 @@ const Login: React.FC = () => {
 			});
 
 			if (response.ok) {
-				const data = await response.json();
-				Cookies.set("sessionId", data.sessionId);
 				alert("ログイン成功");
 			} else {
 				alert("ログイン失敗");

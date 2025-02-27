@@ -134,7 +134,7 @@ export default function AnimatedAlphabets() {
 	const handleFinishFish = async () => {
 		try {
 			const response = await fetch(
-				"https://jsonplaceholder.typicode.com/posts/",
+				"api/fishing",
 				{
 					method: "POST",
 					headers: {
@@ -144,15 +144,15 @@ export default function AnimatedAlphabets() {
 				},
 			);
 
-			if (!response.ok) {
-				throw new Error("APIリクエストに失敗しました");
-			}
-
-			console.log("釣った魚のデータを送信しました", await response.json());
-			setCaughtAlphabets([]); // 送信後に配列を空にする
-			navigate("/");
+			if (response.ok) {
+				alert("ログイン成功");
+				navigate("/");
+			} else {
+				alert("ログイン失敗");
+				navigate("/");			}
 		} catch (error) {
 			console.error("エラー:", error);
+			alert("エラーが発生しました");
 		}
 	};
 
