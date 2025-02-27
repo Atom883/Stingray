@@ -2,7 +2,7 @@ use crate::domain::{
     repositories::session_repository::SessionRepository, transaction_manager::TransactionManager,
 };
 use anyhow::Context as _;
-use axum::http::{HeaderMap, header::AUTHORIZATION};
+use axum::http::HeaderMap;
 use std::sync::Arc;
 
 pub async fn get_user_id_from_request<
@@ -16,8 +16,14 @@ pub async fn get_user_id_from_request<
 ) -> anyhow::Result<String> {
     tracing::info!("headers: {:?}", headers);
     let session_id = headers
-        .get(AUTHORIZATION)
+        .get("cookie")
         .and_then(|v| v.to_str().ok())
+        .and_then(|cookie| {
+            cookie
+                .split(';')
+                .find(|cookie| cookie.starts_with("session_id="))
+                .map(|cookie| cookie.trim_start_matches("session_id="))
+        })
         .context("Missing Authorization")?;
 
     let session = txm

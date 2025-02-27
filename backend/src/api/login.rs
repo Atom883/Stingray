@@ -56,7 +56,10 @@ pub async fn login<
         .await?;
 
         let mut headers = HeaderMap::new();
-        headers.insert(header::AUTHORIZATION, HeaderValue::from_str(&session_id)?);
+        headers.insert(
+            header::AUTHORIZATION,
+            HeaderValue::from_str(&format!("Bearer {session_id}"))?,
+        );
 
         Ok(headers)
     } else {
