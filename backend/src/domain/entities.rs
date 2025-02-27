@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 
 #[derive(Serialize, Deserialize, Debug, Clone, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
     pub id: String,
     pub password_bcrypt: String,
@@ -11,31 +12,59 @@ pub struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct Session {
     pub id: String,
     pub user_id: String,
     pub created_at: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct UserData {
     pub user_id: String,
     pub a_state: AState,
-    pub feeds: FxHashMap<Feed, i64>,
+    pub feeds: FxHashMap<Feed, u64>,
 }
 
-#[derive(Serialize, Deserialize, Default)]
+impl UserData {
+    pub fn new(user_id: String) -> Self {
+        Self {
+            user_id,
+            a_state: AState::default(),
+            feeds: FxHashMap::default(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct AState {
     pub name: String,
-    pub hp: i64,
-    pub max_hp: i64,
+    pub hp: u64,
+    pub max_hp: u64,
     pub color: Color,
-    pub font_family: Option<String>,
+    pub font: Option<String>,
     pub is_bold: bool,
     pub is_outlined: bool,
 }
 
-#[derive(Serialize, Deserialize, Default)]
+impl Default for AState {
+    fn default() -> Self {
+        Self {
+            name: "Stingray".to_string(),
+            hp: 100,
+            max_hp: 100,
+            color: Color::White,
+            font: None,
+            is_bold: false,
+            is_outlined: false,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Default, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
 pub enum Color {
     Yellow,
     Red,
@@ -46,7 +75,7 @@ pub enum Color {
     White,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Hash, Clone, Copy)]
 pub struct Feed(char);
 impl TryInto<Feed> for char {
     type Error = anyhow::Error;
@@ -56,5 +85,11 @@ impl TryInto<Feed> for char {
             "Not an ASCII alphabetic character"
         );
         Ok(Feed(self.to_ascii_uppercase()))
+    }
+}
+
+impl Feed {
+    pub fn is_a(&self) -> bool {
+        self.0 == 'A'
     }
 }

@@ -1,15 +1,12 @@
 use crate::{
-    StingrayState,
     domain::{
-        entities::{AState, Color, Session, User, UserData},
-        repositories::{session_repository::SessionRepository, user_repository::UserRepository},
+        entities::{Session, User, UserData},
+        repositories::{session_repository::SessionRepository, user_data_repository::UserDataRepository, user_repository::UserRepository},
         transaction_manager::TransactionManager,
-    },
-    response::AppResult,
+    }, response::AppResult, StingrayState
 };
 use axum::http::{HeaderMap, HeaderValue, header};
 use axum::{Json, extract::State, response::IntoResponse};
-use fxhash::FxHashMap;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -23,6 +20,7 @@ pub async fn register<
     Txm: TransactionManager<Conn>,
     SR: SessionRepository<Conn>,
     UR: UserRepository<Conn>,
+    UDR: UserDataRepository<Conn>,
 >(
     State(StingrayState {
         txm,
@@ -32,7 +30,7 @@ pub async fn register<
         session_repository,
         user_repository,
         ..
-    }): State<StingrayState<Conn, Txm, SR, UR>>,
+    }): State<StingrayState<Conn, Txm, SR, UR, UDR>>,
     Json(req): Json<RegisterRequest>,
 ) -> AppResult<impl IntoResponse> {
     let password_bcrypt = bcrypt.hash(req.password, bcrypt::DEFAULT_COST)?;
@@ -68,17 +66,7 @@ pub async fn register<
         })
         .await?;
 
-    let userdata = UserData {
-        user_id,
-        a_state: AState {
-            name: "Stingray".to_string(),
-            hp: 100,
-            max_hp: 100,
-            color: Color::Blue,
-            ..Default::default()
-        },
-        feeds: FxHashMap::default(),
-    };
+    let userdata = UserData::new(user_id);
 
     let mut headers = HeaderMap::new();
     headers.insert(
