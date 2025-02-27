@@ -1,4 +1,4 @@
-use anyhow::Context as _;
+use anyhow::Context;
 use axum::{
     Router,
     http::{Method, header::CONTENT_TYPE},
@@ -6,12 +6,15 @@ use axum::{
 };
 use bcrypt::BcryptError;
 use domain::{
-    repositories::{session_repository::SessionRepository, user_repository::UserRepository},
+    repositories::{
+        session_repository::SessionRepository, user_data_repository::UserDataRepository,
+        user_repository::UserRepository,
+    },
     transaction_manager::{SqlxTransactionManager, TransactionManager},
 };
 use persistence::{
     db::create_sqlite_pool, session_repository::SqlxSessionRepository,
-    user_repository::SqlxUserRepository,
+    user_data_repository::SqlxUserDataRepository, user_repository::SqlxUserRepository,
 };
 use std::{
     net::{Ipv4Addr, SocketAddr, SocketAddrV4},
@@ -21,6 +24,7 @@ use tower_http::cors::CorsLayer;
 use websocket::ws_handler;
 
 mod api;
+mod auth;
 mod domain;
 mod persistence;
 mod response;
@@ -46,6 +50,7 @@ pub struct StingrayState<
     Txm: TransactionManager<Conn>,
     SR: SessionRepository<Conn>,
     UR: UserRepository<Conn>,
+    UDR: UserDataRepository<Conn>,
 > {
     pub txm: Arc<Txm>,
     pub now_f: Arc<dyn Fn() -> String + Send + Sync>,
@@ -53,6 +58,7 @@ pub struct StingrayState<
     pub bcrypt: Arc<dyn BCrypt>,
     pub session_repository: SR,
     pub user_repository: UR,
+    pub user_data_repository: UDR,
     _conn: std::marker::PhantomData<Conn>,
 }
 
@@ -61,7 +67,8 @@ impl<
     Txm: TransactionManager<Conn>,
     SR: SessionRepository<Conn>,
     UR: UserRepository<Conn>,
-> Clone for StingrayState<Conn, Txm, SR, UR>
+    UDR: UserDataRepository<Conn>,
+> Clone for StingrayState<Conn, Txm, SR, UR, UDR>
 {
     fn clone(&self) -> Self {
         Self {
@@ -71,6 +78,7 @@ impl<
             bcrypt: Arc::clone(&self.bcrypt),
             session_repository: self.session_repository,
             user_repository: self.user_repository,
+            user_data_repository: self.user_data_repository,
             _conn: std::marker::PhantomData,
         }
     }
@@ -97,12 +105,14 @@ async fn main() -> anyhow::Result<()> {
         bcrypt: Arc::new(BCryptImpl),
         session_repository: SqlxSessionRepository,
         user_repository: SqlxUserRepository,
+        user_data_repository: SqlxUserDataRepository,
         _conn: std::marker::PhantomData,
     };
 
     let api_routes = Router::new()
         .route("/register", post(api::register))
         .route("/login", post(api::login))
+        .route("/user", get(api::get_user))
         .with_state(state.clone());
     let app = Router::new()
         .route("/ws", get(ws_handler))

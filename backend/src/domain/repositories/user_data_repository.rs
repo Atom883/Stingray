@@ -12,15 +12,20 @@ pub trait UserDataRepository<Conn>: Send + Sync + Copy {
         id: &str,
         ctx: TransactionContext<Conn>,
     ) -> impl Future<Output = Result<Option<UserData>>> + Send;
+    fn get_by_user_id(
+        &self,
+        user_id: &str,
+        ctx: TransactionContext<Conn>,
+    ) -> impl Future<Output = Result<Option<UserData>>> + Send;
     fn update(
         &self,
         id: &str,
         user_data: UserData,
         ctx: TransactionContext<Conn>,
     ) -> impl Future<Output = Result<()>> + Send;
-    fn delete(
-        &self,
-        id: &str,
-        ctx: TransactionContext<Conn>,
-    ) -> impl Future<Output = Result<Option<UserData>>> + Send;
+    // fn delete(
+    //     &self,
+    //     id: &str,
+    //     ctx: TransactionContext<Conn>,
+    // ) -> impl Future<Output = Result<Option<UserData>>> + Send;
 }

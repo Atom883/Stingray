@@ -3,7 +3,10 @@ use crate::{
     StingrayState,
     domain::{
         entities::Session,
-        repositories::{session_repository::SessionRepository, user_repository::UserRepository},
+        repositories::{
+            session_repository::SessionRepository, user_data_repository::UserDataRepository,
+            user_repository::UserRepository,
+        },
         transaction_manager::TransactionManager,
     },
     response::AppResult,
@@ -20,6 +23,7 @@ pub async fn login<
     Txm: TransactionManager<Conn>,
     SR: SessionRepository<Conn>,
     UR: UserRepository<Conn>,
+    UDR: UserDataRepository<Conn>,
 >(
     State(StingrayState {
         txm,
@@ -29,7 +33,7 @@ pub async fn login<
         session_repository,
         user_repository,
         ..
-    }): State<StingrayState<Conn, Txm, SR, UR>>,
+    }): State<StingrayState<Conn, Txm, SR, UR, UDR>>,
     Json(req): Json<RegisterRequest>,
 ) -> AppResult<impl IntoResponse> {
     let user = txm

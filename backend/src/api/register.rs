@@ -1,11 +1,9 @@
 use crate::{
-    StingrayState,
     domain::{
         entities::{Session, User, UserData},
-        repositories::{session_repository::SessionRepository, user_repository::UserRepository},
+        repositories::{session_repository::SessionRepository, user_data_repository::UserDataRepository, user_repository::UserRepository},
         transaction_manager::TransactionManager,
-    },
-    response::AppResult,
+    }, response::AppResult, StingrayState
 };
 use axum::http::{HeaderMap, HeaderValue, header};
 use axum::{Json, extract::State, response::IntoResponse};
@@ -22,6 +20,7 @@ pub async fn register<
     Txm: TransactionManager<Conn>,
     SR: SessionRepository<Conn>,
     UR: UserRepository<Conn>,
+    UDR: UserDataRepository<Conn>,
 >(
     State(StingrayState {
         txm,
@@ -31,7 +30,7 @@ pub async fn register<
         session_repository,
         user_repository,
         ..
-    }): State<StingrayState<Conn, Txm, SR, UR>>,
+    }): State<StingrayState<Conn, Txm, SR, UR, UDR>>,
     Json(req): Json<RegisterRequest>,
 ) -> AppResult<impl IntoResponse> {
     let password_bcrypt = bcrypt.hash(req.password, bcrypt::DEFAULT_COST)?;

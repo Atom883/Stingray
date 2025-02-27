@@ -23,8 +23,8 @@ pub struct Session {
 #[serde(rename_all = "camelCase")]
 pub struct UserData {
     pub user_id: String,
-    a_state: AState,
-    feeds: FxHashMap<Feed, i64>,
+    pub a_state: AState,
+    pub feeds: FxHashMap<Feed, u64>,
 }
 
 impl UserData {
@@ -41,8 +41,8 @@ impl UserData {
 #[serde(rename_all = "camelCase")]
 pub struct AState {
     pub name: String,
-    pub hp: i64,
-    pub max_hp: i64,
+    pub hp: u64,
+    pub max_hp: u64,
     pub color: Color,
     pub font: Option<String>,
     pub is_bold: bool,

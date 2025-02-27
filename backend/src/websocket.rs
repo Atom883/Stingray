@@ -1,4 +1,4 @@
-use crate::domain::entities::{User, UserData};
+use crate::domain::entities::UserData;
 use axum::{
     extract::{
         WebSocketUpgrade,
