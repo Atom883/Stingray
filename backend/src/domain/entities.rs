@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 
 #[derive(Serialize, Deserialize, Debug, Clone, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
     pub id: String,
     pub password_bcrypt: String,
@@ -11,6 +12,7 @@ pub struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct Session {
     pub id: String,
     pub user_id: String,
@@ -18,6 +20,7 @@ pub struct Session {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct UserData {
     pub user_id: String,
     a_state: AState,
@@ -35,6 +38,7 @@ impl UserData {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AState {
     pub name: String,
     pub hp: i64,
