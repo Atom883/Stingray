@@ -64,6 +64,7 @@ impl Default for AState {
 }
 
 #[derive(Serialize, Deserialize, Default, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
 pub enum Color {
     Yellow,
     Red,

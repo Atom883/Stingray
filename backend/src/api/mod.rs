@@ -7,3 +7,5 @@ pub use user::get_user;
 mod fish;
 pub use fish::add_fish;
 pub use fish::eat_fish;
+mod edit_a;
+pub use edit_a::edit_a;
