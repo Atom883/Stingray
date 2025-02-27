@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
+import { useAtom } from 'jotai';
+import { userDataAtom } from '~/jotai/atoms';
 
 const Signup: React.FC = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [userData, setUserData] = useAtom(userDataAtom);
 
 
     const handleSignup = async () => {
+
         try {
             const response = await fetch('http://localhost:3000/api/register', {
                 method: 'POST',
@@ -22,6 +26,7 @@ const Signup: React.FC = () => {
                 const data = await response.json();
                 Cookies.set('sessionId', data.sessionId);
                 navigate("/");
+                setUserData(data);
                 alert('サインアップ成功');
             } else {
                 alert('サインアップ失敗');

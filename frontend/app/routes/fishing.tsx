@@ -18,7 +18,7 @@ export default function AnimatedAlphabets() {
 	const [positionY, setPositionY] = useState(0);
 	const [showNowFish, setShowNowFish] = useState(false);
 	const [caughtAlphabet, setCaughtAlphabet] = useState<Alphabet | null>(null);
-	const [caughtAlphabets, setCaughtAlphabets] = useState<Alphabet[]>([]);
+	const [caughtAlphabets, setCaughtAlphabets] = useState<{ [key: string]: number }>({}); 
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -91,10 +91,10 @@ export default function AnimatedAlphabets() {
 			} else if (event.key === " " && showNowFish) {
 				// スペースキーでアルファベットを捕まえる
 				if (caughtAlphabet) {
-					setCaughtAlphabets((prevCaughtAlphabets) => [
-						...prevCaughtAlphabets,
-						caughtAlphabet,
-					]); // 捕まえたアルファベットを記録
+					setCaughtAlphabets((prevCaughtAlphabets) => ({
+                        ...prevCaughtAlphabets,
+                        [caughtAlphabet.char]: (prevCaughtAlphabets[caughtAlphabet.char] || 0) + 1,
+                    })); 
 					setCaughtAlphabet(null); // caughtAlphabetをリセットする
 					setAlphabets((alpfabet) =>
 						alpfabet.filter(
@@ -134,7 +134,7 @@ export default function AnimatedAlphabets() {
 	const handleFinishFish = async () => {
 		try {
 			const response = await fetch(
-				"api/fishing",
+				"http://localhost/api/add_fish",
 				{
 					method: "POST",
 					headers: {
@@ -143,13 +143,10 @@ export default function AnimatedAlphabets() {
 					body: JSON.stringify(caughtAlphabets),
 				},
 			);
-
 			if (response.ok) {
-				alert("ログイン成功");
+				console.log("釣り上げたアルファベット:", caughtAlphabets);
 				navigate("/");
-			} else {
-				alert("ログイン失敗");
-				navigate("/");			}
+			}
 		} catch (error) {
 			console.error("エラー:", error);
 			alert("エラーが発生しました");
