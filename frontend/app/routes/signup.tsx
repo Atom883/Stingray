@@ -1,33 +1,37 @@
-import type React from "react";
-import { useState } from "react";
-import Cookies from "js-cookie";
+import React, { useState } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
 
 const Signup: React.FC = () => {
-	const [id, setId] = useState("");
-	const [password, setPassword] = useState("");
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-	const handleSignup = async () => {
-		try {
-			const response = await fetch("http://localhost:3000/api/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ id, password }),
-			});
 
-			if (response.ok) {
-				const data = await response.json();
-				Cookies.set("sessionId", data.sessionId);
-				alert("サインアップ成功");
-			} else {
-				alert("サインアップ失敗");
-			}
-		} catch (error) {
-			console.error("エラー:", error);
-			alert("エラーが発生しました");
-		}
-	};
+    const handleSignup = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                Cookies.set('sessionId', data.sessionId);
+                navigate("/");
+                alert('サインアップ成功');
+            } else {
+                alert('サインアップ失敗');
+            }
+        } catch (error) {
+            console.error('エラー:', error);
+            alert('エラーが発生しました');
+        }
+    };
+
 
 	return (
 		<div

@@ -1,0 +1,137 @@
+.battle-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://blog-imgs-46.fc2.com/p/i/p/piposozai/pipo-battlebg002b.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+.character-wrapper { /* ラッパー要素のスタイル */
+    position: absolute;
+    bottom: 50px;
+    width: 300px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.character-wrapper.left {
+    left: 50px;
+}
+
+.character-wrapper.right {
+    right: 50px;
+}
+
+.character-container { /* 元のcharacter-containerのスタイル */
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%; /* 幅を100%に変更 */
+}
+
+
+.character-container.left {
+    left: 50px;
+}
+
+.character-container.right {
+    right: 50px;
+}
+
+.big-character-name { /* Aを大きく表示するためのスタイル */
+    font-size: 350px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    flex-grow: 1; /* 追加 */
+    display: flex; /* 追加 */
+    align-items: center; /* 追加 */
+    justify-content: center; /* 追加 */
+}
+
+.character-status { /* HP部分を下に移動するためのスタイル */
+    width: 100%;
+}
+
+.hp-container {
+    margin-bottom: 10px;
+}
+
+.hp-bar {
+    width: 100%;
+    height: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.hp-fill {
+    width: 100%;
+    height: 100%;
+    background-color: green;
+}
+
+.hp-text {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.status-icons {
+    display: flex;
+    justify-content: center;
+}
+
+.status-icon {
+    width: 70px;
+    height: 40px;
+    border-radius: 10px;
+    margin: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 5px;
+}
+
+.status-icon:hover {
+    cursor: pointer;
+    filter: brightness(0.7);
+}
+
+.status-icon.red {
+    background-color: red;
+}
+
+.status-icon.blue {
+    background-color: blue;
+}
+
+.status-icon.yellow {
+    background-color: yellow;
+}
+
+.vs {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 200px;
+    font-weight: bold;
+    color: red;
+    z-index: 1;
+}

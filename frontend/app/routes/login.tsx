@@ -1,31 +1,34 @@
-import type React from "react";
-import { useState } from "react";
-import Cookies from "js-cookie";
+import React, { use, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
+
 
 const Login: React.FC = () => {
-	const [id, setId] = useState("");
-	const [password, setPassword] = useState("");
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-	const handleLogin = async () => {
-		try {
-			const response = await fetch("http://localhost:3000/api/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ id, password }),
-			});
-
-			if (response.ok) {
-				alert("ログイン成功");
-			} else {
-				alert("ログイン失敗");
-			}
-		} catch (error) {
-			console.error("エラー:", error);
-			alert("エラーが発生しました");
-		}
-	};
+    const handleLogin = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, password }),
+            });
+            if (response.ok) {
+                alert('ログイン成功');
+                navigate("/")
+                
+            } else {
+                alert('ログイン失敗');
+            }
+        } catch (error) {
+            console.error('エラー:', error);
+            alert('エラーが発生しました');
+        }
+    };
 
 	return (
 		<div

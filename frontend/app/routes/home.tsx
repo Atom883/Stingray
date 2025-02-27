@@ -189,6 +189,13 @@ export default function Home() {
 							cursor: "pointer",
 							transition: "all 0.3s ease",
 						}}
+            onMouseOver={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
+            }}
+            onMouseOut={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
+            }}
+
 					>
 						<img
 							src="https://icooon-mono.com/i/icon_13136/icon_131361_64.png"
@@ -213,6 +220,12 @@ export default function Home() {
 							cursor: "pointer",
 							transition: "all 0.3s ease",
 						}}
+            onMouseOver={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
+            }}
+            onMouseOut={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
+            }}
 					>
 						<img
 							src="https://icooon-mono.com/i/icon_12209/icon_122091_64.png"
@@ -223,111 +236,118 @@ export default function Home() {
 					</button>
 				</Link>
 
-				<Link to="/fishing">
-					<button
-						style={{
-							display: "flex",
-							alignItems: "center",
-							padding: "20px 40px",
-							fontSize: "1.5rem",
-							backgroundColor: "#E0E0E0",
-							borderRadius: "8px",
-							border: "2px solid #BDBDBD",
-							boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-							cursor: "pointer",
-							transition: "all 0.3s ease",
-						}}
-					>
-						<img
-							src="https://icooon-mono.com/i/icon_15011/icon_150111_64.png"
-							alt="fishing"
-							style={{ width: "40px", marginRight: "12px" }}
-						/>
-						永釣
-					</button>
-				</Link>
+        <Link to="/fishing">
+          <button
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "20px 40px",
+              fontSize: "1.5rem",
+              backgroundColor: "#E0E0E0",
+              borderRadius: "8px",
+              border: "2px solid #BDBDBD",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+            }}
+            onMouseOver={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
+            }}
+            onMouseOut={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
+            }}
+          >
+            <img
+              src="https://icooon-mono.com/i/icon_15011/icon_150111_64.png"
+              alt="fishing"
+              style={{ width: "40px", marginRight: "12px" }}
+            />
+            永釣
+          </button>
+        </Link>
 
-				<button
-					onClick={toggleNutrition}
-					style={{
-						display: "flex",
-						alignItems: "center",
-						padding: "20px 40px",
-						fontSize: "1.5rem",
-						backgroundColor: "#E0E0E0",
-						borderRadius: "8px",
-						border: "2px solid #BDBDBD",
-						boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-						cursor: "pointer",
-						transition: "all 0.3s ease",
-					}}
-				>
-					<img
-						src="https://icooon-mono.com/i/icon_10071/icon_100711_64.png"
-						alt="training"
-						style={{ width: "40px", marginRight: "12px" }}
-					/>
-					栄養
-				</button>
-			</div>
+        <button
+          onClick={toggleNutrition}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            padding: "20px 40px",
+            fontSize: "1.5rem",
+            backgroundColor: "#E0E0E0",
+            borderRadius: "8px",
+            border: "2px solid #BDBDBD",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+          }}
+            onMouseOver={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#BDBDBD";
+            }}
+            onMouseOut={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = "#E0E0E0";
+            }}
+        >
+          <img
+            src="https://icooon-mono.com/i/icon_10071/icon_100711_64.png"
+            alt="training"
+            style={{ width: "40px", marginRight: "12px" }}
+          />
+          栄養
+        </button>
+      </div>
 
-			{/* 栄養ボタンで表示されるアルファベットのリスト */}
-			{isNutritionVisible && (
-				<div
-					style={{
-						fontSize: "2rem",
-						color: "black",
-						position: "absolute",
-						top: "15%", // 栄養ボタンの上に配置
-						left: "calc(55% + 7rem)", // Aの隣に表示
-						zIndex: 1,
-						textAlign: "left",
-						width: "30%",
-						backgroundColor: "rgba(255, 255, 255, 0.7)",
-						padding: "7px",
-						borderRadius: "15px",
-						boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
-					}}
-				>
-					<h2>獲得したアルファベット:</h2>
-					<div>
-						{currentLetters.map((letter, index) => (
-							<div
-								key={index}
-								style={{
-									cursor: "pointer",
-									padding: "5px",
-									border: "1px solid black",
-									marginBottom: "5px",
-									backgroundColor: "lightgray",
-									borderRadius: "5px",
-									textAlign: "center",
-								}}
-								onClick={() => handleLetterClick(letter)} // クリックでHP回復 // クリックでHP回復
-							>
-								{letter}
-							</div>
-						))}
-					</div>
+      {/* 栄養ボタンで表示されるアルファベットのリスト */}
+      {isNutritionVisible && (
+        <div
+          style={{
+            fontSize: "2rem",
+            color: "black",
+            position: "absolute",
+            top: "15%", // 栄養ボタンの上に配置
+            left: "calc(55% + 7rem)", // Aの隣に表示
+            zIndex: 1,
+            textAlign: "left",
+            width: "30%",
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            padding: "7px",
+            borderRadius: "15px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <h2>獲得したアルファベット:</h2>
+          <div>
+            {currentLetters.map((letter, index) => (
+              <div
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  padding: "5px",
+                  border: "1px solid black",
+                  marginBottom: "5px",
+                  backgroundColor: "lightgray",
+                  borderRadius: "5px",
+                  textAlign: "center",
+                }}
+                onClick={() => handleLetterClick(letter)} // クリックでHP回復
+              >
+                {letter}
+              </div>
+            ))}
+          </div>
 
-					{/* ページネーション */}
-					<div style={{ marginTop: "10px", textAlign: "center" }}>
-						<button
-							onClick={() => goToPage(currentPage - 1)}
-							disabled={currentPage === 1}
-						>
-							前
-						</button>
-						<span>{`${currentPage} / ${totalPages}`}</span>
-						<button
-							onClick={() => goToPage(currentPage + 1)}
-							disabled={currentPage === totalPages}
-						>
-							次
-						</button>
-					</div>
-				</div>
-			)}
-		</div>
-	);
+          {/* ページネーション */}
+          <div style={{ marginTop: "10px", textAlign: "center" }}>
+            <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+              前
+            </button>
+            <span>{`${currentPage} / ${totalPages}`}</span>
+            <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+              次
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
 }
