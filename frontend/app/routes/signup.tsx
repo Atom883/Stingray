@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
 
 const Signup: React.FC = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSignup = async () => {
         try {
-            const response = await fetch('/api/signup', {
+            const response = await fetch('http://localhost:3000/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -18,6 +20,7 @@ const Signup: React.FC = () => {
             if (response.ok) {
                 const data = await response.json();
                 Cookies.set('sessionId', data.sessionId);
+                navigate("/");
                 alert('サインアップ成功');
             } else {
                 alert('サインアップ失敗');

@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
+
 
 const Login: React.FC = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch('http://localhost:3000/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ id, password }),
             });
-
             if (response.ok) {
-                const data = await response.json();
-                Cookies.set('sessionId', data.sessionId);
                 alert('ログイン成功');
+                navigate("/")
+                
             } else {
                 alert('ログイン失敗');
             }
