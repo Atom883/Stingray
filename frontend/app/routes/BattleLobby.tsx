@@ -14,8 +14,8 @@ export default function BattleLobby() {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-  const ws = new WebSocket('ws://localhost:3000/ws');
+  // useEffect(() => {
+  // const ws = new WebSocket('ws://localhost:3000/ws');
 
   // ws.onopen = () => {
   //     console.log('websocketに接続しました！');
@@ -40,10 +40,10 @@ export default function BattleLobby() {
     //   }
     // }
 
-  },[])
+  // },[])
 
   const handleMatchButtonClick = () => {
-    setIsMatching(true); //待機中のフラグをtureに
+  //   setIsMatching(true); //待機中のフラグをtureに
 
 
     // ws.onmessage = (event) => {

@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useAtom } from 'jotai';
 import { userDataAtom } from '../jotai/atoms';
+import homeBgm from "../music/homeBgm.mp3"
 
 export default function Home() {
+
+  //bgmの再生
+  useEffect(() => {
+    const audio = new Audio(homeBgm);
+    audio.loop = true;
+    audio.play();
+
+    return () => {
+      audio.pause(); // 再生を停止
+      audio.currentTime = 0; // 再生位置をリセット
+    };
+  },[])
+
 	const [userData, setUserData] = useAtom(userDataAtom);
 	// 仮のデータ（釣りで獲得したアルファベット）
 	const [letters, setLetters] = useState([
@@ -45,7 +59,7 @@ export default function Home() {
 	// APIを呼び出す関数
 	const handleDelete = async (letter: string) => {
 		try {
-			const response = await fetch("/api/eat-fish", {
+			const response = await fetch("http://localhost:8000/api/eat-fish", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
