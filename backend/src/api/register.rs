@@ -1,7 +1,7 @@
 use crate::{
     StingrayState,
     domain::{
-        entities::{AState, Color, Session, User, UserData},
+        entities::{Session, User, UserData},
         repositories::{session_repository::SessionRepository, user_repository::UserRepository},
         transaction_manager::TransactionManager,
     },
@@ -9,7 +9,6 @@ use crate::{
 };
 use axum::http::{HeaderMap, HeaderValue, header};
 use axum::{Json, extract::State, response::IntoResponse};
-use fxhash::FxHashMap;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
